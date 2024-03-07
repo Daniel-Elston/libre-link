@@ -1,55 +1,26 @@
-My CookieCutter Template
-==============================
-
-
-Project Organization
-------------
-
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   ├── pipeline.py    <- Central pipeline class integrating directory scripts
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    ├── config.yaml          <- Configuration settings and parameters for the project.
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    └── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-
-
---------
-
-<p><small>Project structure based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+# Feature Desc.
+- status: Likely indicates the status of the request or data retrieval process.
+- data: The main container for the glucose monitoring data.
+- lastUpload, lastUploadCGM, lastUploadPro: Timestamps indicating the last data uploads from different sources or devices.
+- reminderSent: A flag that might indicate whether a reminder has been sent to the user.
+- devices: A list of device identifiers used for monitoring.
+- periods: An array of objects, each representing a monitoring period with its own set of data.
+- dateEnd: The end timestamp of the monitoring period.
+- dateStart: The start timestamp of the monitoring period.
+- noData: A boolean indicating whether data is available for the period.
+- dataType: A code representing the type of data collected.
+- avgGlucose: The average glucose level over the period.
+- serialNumber: The serial number of the device.
+- deviceId: A unique identifier for the device.
+- deviceType: A code representing the type of device.
+- mergeableDevices: Information about other devices that can be merged with this data (if any).
+- hypoEvents: The number of hypoglycemic events detected.
+- avgTestsPerDay: The average number of tests conducted per day.
+- daysOfData: The number of days over which data is collected.
+- data:
+- maxGlucoseRange: The maximum glucose level recorded.
+- minGlucoseRange: The minimum glucose level recorded.
+- maxGlucoseValue: The highest glucose value in this period.
+- blocks: An array of sub-arrays, where each sub-array represents glucose data captured at specific times throughout the day.
+- time: The time offset in seconds from the start of the period (dateStart) at which the readings were taken.
+- percentile5 through percentile95: Glucose level readings at the 5th, 25th, 50th, 75th, and 95th percentiles, respectively, for each time offset.

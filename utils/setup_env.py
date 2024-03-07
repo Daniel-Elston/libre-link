@@ -29,7 +29,6 @@ def setup_project_env(
     # Set up logging
     setup_logs = setup_logging(
         'DataPipeline', project_dir, f'{Path(__file__).stem}.log', config)
-    # file_level='DEBUG', console_level='DEBUG')
 
     return project_dir, config, setup_logs
 

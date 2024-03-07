@@ -1,7 +1,4 @@
-
 notebooks/*
-data/raw/*
-data/*.parquet
 data/*
 log/*
 # Byte-compiled / optimized / DLL files
