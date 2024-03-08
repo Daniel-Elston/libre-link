@@ -52,7 +52,12 @@ def setup_logging(name, project_dir, log_file_name, config):
                 'propagate': False
             },
             'urllib3': {
-                'level': 'WARNING',
+                'level': 'ERROR',
+                'handlers': ['console', 'file'],
+                'propagate': False
+            },
+            'schedule': {
+                'level': 'ERROR',
                 'handlers': ['console', 'file'],
                 'propagate': False
             },
