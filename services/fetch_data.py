@@ -6,11 +6,6 @@ from datetime import datetime
 
 import requests
 
-from utils.setup_env import setup_project_env
-
-# Setup environment
-project_dir, config, setup_logs = setup_project_env()
-
 # Constants
 BASE_URL = "https://api.libreview.io"
 HEADERS = {
@@ -39,7 +34,7 @@ def login(email, password, retries=3, delay=60*2):
             data = response.json()
             token = data.get('data', []).get("authTicket", []).get("token", [])
             logging.info(
-                f"Successful run at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                f"Successfully fetched data at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
             return token
         except requests.exceptions.HTTPError as e:

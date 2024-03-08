@@ -1,27 +1,26 @@
 from __future__ import annotations
 
-import os
-
 import psycopg2
 from sqlalchemy import create_engine
 
 
 def create_my_engine(config):
-    """
-    Get the database engine.
-
-    config: Configuration dictionary.
-    """
-    conf = {
-        'user': os.getenv('POSTGRES_USER'),
-        'password': os.getenv('POSTGRES_PASSWORD'),
-        'host': os.getenv('POSTGRES_HOST'),
-        'port': os.getenv('POSTGRES_PORT'),
-        'database': os.getenv('POSTGRES_DB')
-    }
+    """Get the database engine."""
     engine = create_engine(
-        f'postgresql+psycopg2://{conf["user"]}:{conf["password"]}@{conf["host"]}:{conf["port"]}/{conf["database"]}')
+        f'postgresql+psycopg2://{config["user"]}:{config["password"]}@{config["host"]}:{config["port"]}/{config["database"]}')
     conn = psycopg2.connect(
-        f'dbname={conf["database"]} user={conf["user"]} host={conf["host"]} password={conf["password"]}')
+        f'dbname={config["database"]} user={config["user"]} host={config["host"]} password={config["password"]}')
 
     return engine, conn
+
+
+def create_my_pool(config):
+    """Initialize connection pool"""
+    pgsql_pool = psycopg2.pool.SimpleConnectionPool(
+        1, 10,
+        user=config["user"],
+        password=config["password"],
+        host=config["host"],
+        port=config["port"],
+        database=config["database"])
+    return pgsql_pool

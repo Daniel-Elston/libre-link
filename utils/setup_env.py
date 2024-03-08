@@ -5,6 +5,7 @@ from pathlib import Path
 import dotenv
 import yaml
 
+from database.config import db_creds
 from utils.logging_config import setup_logging
 
 
@@ -30,8 +31,11 @@ def setup_project_env(
     setup_logs = setup_logging(
         'DataPipeline', project_dir, f'{Path(__file__).stem}.log', config)
 
-    return project_dir, config, setup_logs
+    # Set up database credentials
+    db_config = db_creds()
+
+    return project_dir, config, setup_logs, db_config
 
 
 if __name__ == '__main__':
-    project_dir, config, setup_logs = setup_project_env()
+    project_dir, config, setup_logs, db_config = setup_project_env()
