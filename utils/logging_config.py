@@ -69,3 +69,4 @@ def setup_logging(name, project_dir, log_file_name, config):
     }
 
     logging.config.dictConfig(LOGGING_CONFIG)
+    return logging.getLogger(name)

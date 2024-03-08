@@ -3,6 +3,7 @@ data/*
 log/*
 
 notes.md
+dir_tree.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

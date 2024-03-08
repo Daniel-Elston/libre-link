@@ -2,46 +2,43 @@ from __future__ import annotations
 
 import atexit
 import logging
-import os
 import time
 
 import schedule
 
-from database.pipeline import insert_to_db
-from database.utils_db.connection import create_my_pool
-from services.fetch_data import authenticate_and_fetch_data
-from services.processing import process_timestamps
-from utils.file_utils import append_json
+from database.database_management import DatabaseManagement
+from services.auth_management import AuthenticationManagement
+from services.data_management import DataManagement
+from storage.storage_management import StorageManagement
 from utils.setup_env import setup_project_env
 
 # Environment setup
 project_dir, config, setup_logs, db_config = setup_project_env()
-pgsql_pool = create_my_pool(db_config)
-
-
-def close_pool():
-    """Close the connection pool on exit."""
-    pgsql_pool.closeall()
-    logging.info("Connection pool closed.")
-
-
-atexit.register(close_pool)
+atexit.register(DatabaseManagement(db_config).close_pool)
 
 
 def main():
-    email = os.getenv("EMAIL")
-    password = os.getenv("PASSWORD")
+    """Main application function"""
 
-    # Authenticate and fetch data
-    cgm_data = authenticate_and_fetch_data(email, password)
-    glucose_measurement = cgm_data['data']['connection']['glucoseMeasurement']
+    # Authentication
+    auth_manager = AuthenticationManagement(config)
+    token = auth_manager.login()
+    patient_id = auth_manager.get_patient_id()
+
+    # Fetch and access data
+    data_manager = DataManagement(config, token, patient_id)
+    glucose_measurement = data_manager.get_measurements()
 
     # Save data to local JSON store
-    append_json(glucose_measurement, 'data/rt_data.json')
+    store_manager = StorageManagement()
+    store_manager.append_json(glucose_measurement, 'rt_data.json')
 
-    # Process and insert data into the database
-    process_timestamps([glucose_measurement])
-    insert_to_db([glucose_measurement], pgsql_pool)
+    # Process data
+    data_manager.process_timestamps(glucose_measurement)
+
+    # Insert data into the database
+    db_manager = DatabaseManagement(db_config)
+    db_manager.insert_to_db(glucose_measurement)
 
 
 if __name__ == "__main__":
