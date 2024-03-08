@@ -44,3 +44,12 @@ def load_from_parquet(path):
 def load_sql(path):
     with open(path, 'r') as file:
         return file.read()
+
+
+def get_dtype(data):
+    if data:
+        item_n = data[0]
+        for key, value in item_n.items():
+            print(f"{key}: {type(value)}")
+    else:
+        print("List is empty.")

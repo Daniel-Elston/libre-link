@@ -1,5 +1,5 @@
 
-INSERT INTO measurements (
+INSERT INTO live_measurements (
     timestamp,
     type,
     value_mg_per_dl,
@@ -7,7 +7,9 @@ INSERT INTO measurements (
     glucose_units,
     value,
     is_high,
-    is_low
+    is_low,
+    trend_arrow,
+    trend_message
 )
 VALUES (
     %(timestamp)s,
@@ -17,5 +19,7 @@ VALUES (
     %(glucose_units)s,
     %(value)s,
     %(is_high)s,
-    %(is_low)s
-) RETURNING measurement_id;
+    %(is_low)s,
+    %(trend_arrow)s,
+    %(trend_message)s
+);

@@ -1,24 +1,19 @@
 from __future__ import annotations
 
-import pandas as pd
+from datetime import datetime
+
 import plotly.graph_objs as go
 import plotly.offline as pyo
 
 
-def access_and_store(data):
-    """Access the data and store it in a pandas dataframe"""
-
-    quotes = data['chart']['result'][0]['indicators']['quote'][0]
-    timestamps = data['chart']['result'][0]['timestamp']
-
-    df = pd.DataFrame(quotes)
-    dt_series = pd.to_datetime(timestamps, unit='s')
-    df.index = dt_series
-
-    for col in df.columns:
-        df[col] = df[col].ffill()
-
-    return df
+def process_timestamps(data):
+    """Convert timestamps to datetime objects."""
+    timestamp_format = '%m/%d/%Y %I:%M:%S %p'
+    for item in data:
+        item['Timestamp'] = datetime.strptime(
+            item['Timestamp'], timestamp_format)
+        item['FactoryTimestamp'] = datetime.strptime(
+            item['FactoryTimestamp'], timestamp_format)
 
 
 def plotting(df, to_html=False):
@@ -32,12 +27,3 @@ def plotting(df, to_html=False):
         return pyo.plot(fig, include_plotlyjs=False, output_type='div')
     else:
         fig.show()
-
-    # df['Timestamp'] = pd.to_datetime(df['Timestamp'])
-    # df.set_index('Timestamp', inplace=True)
-    # df = df.sort_index()
-
-    # print("Combined DataFrame with GraphData and GlucoseMeasurement:")
-    # print(glucose_measurement_df)
-
-    # print(combined_values_df)

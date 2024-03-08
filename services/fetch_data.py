@@ -4,15 +4,11 @@ import logging
 import time
 from datetime import datetime
 
-import dotenv
 import requests
 
 from utils.setup_env import setup_project_env
 
-# Load environment variables
-dotenv.load_dotenv()
-
-# Setup Logging
+# Setup environment
 project_dir, config, setup_logs = setup_project_env()
 
 # Constants
@@ -26,10 +22,9 @@ HEADERS = {
     'version': '4.7'
 }
 
-# Function to log in and retrieve JWT token
-
 
 def login(email, password, retries=3, delay=60*2):
+    """Log in to LibreLinkUp and retrieve JWT token."""
     endpoint = "/llu/auth/login"
     payload = {
         "email": email,
@@ -42,9 +37,7 @@ def login(email, password, retries=3, delay=60*2):
                 BASE_URL + endpoint, headers=HEADERS, json=payload)
             response.raise_for_status()
             data = response.json()
-            # print(data)
             token = data.get('data', []).get("authTicket", []).get("token", [])
-            # print(token)
             logging.info(
                 f"Successful run at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
@@ -57,10 +50,9 @@ def login(email, password, retries=3, delay=60*2):
                 continue
             raise
 
-# Function to get connections of patients
-
 
 def get_patient_connections(token):
+    """Retrieve patient connections from LibreLinkUp."""
     endpoint = "/llu/connections"
     headers = {**HEADERS, 'Authorization': f"Bearer {token}"}
 
@@ -68,13 +60,19 @@ def get_patient_connections(token):
     response.raise_for_status()
     return response.json()
 
-# Function to retrieve CGM data for a specific patient
-
 
 def get_cgm_data(token, patient_id):
+    """Retrieve CGM data for a specific patient from LibreLinkUp."""
     endpoint = f"/llu/connections/{patient_id}/graph"
     headers = {**HEADERS, 'Authorization': f"Bearer {token}"}
 
     response = requests.get(BASE_URL + endpoint, headers=headers)
     response.raise_for_status()
     return response.json()
+
+
+def authenticate_and_fetch_data(email, password):
+    token = login(email, password)
+    patient_data = get_patient_connections(token)
+    patient_id = patient_data['data'][0]["patientId"]
+    return get_cgm_data(token, patient_id)

@@ -15,21 +15,9 @@ def prepare_measurements(data):
             'glucose_units': item.get('GlucoseUnits'),
             'value': item.get('Value'),
             'is_high': item.get('isHigh', False),
-            'is_low': item.get('isLow', False)
-        }
-        preparations.append(prepared_item)
-    return preparations
-
-
-def prepare_trends(data, measurement_id):
-    preparations = []
-    for item in data:
-        prepared_item = {
-            'measurement_id': measurement_id,
-            'timestamp': item.get('Timestamp'),
+            'is_low': item.get('isLow', False),
             'trend_arrow': None if np.isnan(item.get('TrendArrow', np.nan)) else item.get('TrendArrow'),
-            # if np.isnan(item.get('TrendMessage', np.nan)) else item.get('TrendMessage'),
-            'trend_message': None,
+            'trend_message': None
         }
         preparations.append(prepared_item)
     return preparations
