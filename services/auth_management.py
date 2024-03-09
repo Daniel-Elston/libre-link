@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 import os
 import time
-from datetime import datetime
 
 import requests
 
@@ -46,9 +45,6 @@ class AuthenticationManagement():
                 data = response.json()
                 token = data.get('data', []).get(
                     "authTicket", []).get("token", [])
-                self.logger.info(
-                    f"Successfully logged in at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
                 return token
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code == 429 and attempt < retries:

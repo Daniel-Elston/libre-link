@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import datetime
 
 import psycopg2.pool
 from sqlalchemy import create_engine
@@ -58,7 +59,8 @@ class DatabaseManagement:
                 for measurement in measurements_to_insert:
                     cur.execute(measurements_insert_sql, measurement)
                 conn.commit()
-                self.logger.info("Data inserted successfully.")
+                self.logger.info(
+                    f"Data inserted successfully at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             except (Exception, psycopg2.DatabaseError) as error:
                 conn.rollback()
                 self.logger.error(f"Failed to insert data: {error}")
@@ -70,3 +72,28 @@ class DatabaseManagement:
         """Close the connection pool on exit."""
         self.pgsql_pool.closeall()
         self.logger.info("Connection pool closed.")
+
+    def fetch_data(self, query=None, table_name='libre_link.live_measurements'):
+        data = []
+        conn = self.pgsql_pool.getconn()
+
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            if query is None:
+                # Fetch all if no query
+                cur.execute(f"SELECT * FROM {table_name};")
+            else:
+                # Execute query
+                cur.execute(query)
+
+            rows = cur.fetchall()
+            for row in rows:
+                data.append(dict(row))
+
+            self.logger.info("Data fetched successfully.")
+        except (Exception, psycopg2.DatabaseError) as error:
+            self.logger.error(f"Failed to fetch data: {error}")
+        finally:
+            cur.close()
+            self.pgsql_pool.putconn(conn)
+        return data

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bloods</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>My Blood Sugar Views</h1>
+    {{ plot|safe }}
+        <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>Daniel Elston</h4>
+                </div>
+            <div class="col-md-4 text-center">
+                <ul class="social-icons">
+                    <a href="https://www.linkedin.com/in/daniel-elston-data-science/"><img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn"></a>
+                    <a href="https://github.com/Daniel-Elston/"><img src="{{ url_for('static', filename='img/github.png') }}" alt="GitHub"></a>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

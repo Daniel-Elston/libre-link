@@ -43,7 +43,7 @@ def main():
 
 if __name__ == "__main__":
     logging.info("Starting the application...")
-    schedule.every(1).minutes.do(main)
+    schedule.every(90).seconds.do(main)
     try:
         while True:
             schedule.run_pending()
